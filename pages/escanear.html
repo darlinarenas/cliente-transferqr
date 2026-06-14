@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        TransferQR
+    </title>
+
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/escanear.css">
+
+</head>
+
+<body>
+
+    <div class="scan-container">
+
+        <div class="scan-card">
+
+            <div class="scan-logo" id="businessLogo">
+                🏪
+            </div>
+
+            <h1 id="businessName">
+                Mi Negocio
+            </h1>
+
+            <p class="scan-subtitle">
+                Datos para transferencia
+            </p>
+
+            <div class="scan-data">
+
+                <div class="scan-row">
+
+                    <span>
+                        Banco
+                    </span>
+
+                    <strong id="bank">
+                        ---
+                    </strong>
+
+                </div>
+
+                <div class="scan-row">
+
+                    <span>
+                        Tipo de cuenta
+                    </span>
+
+                    <strong id="accountType">
+                        ---
+                    </strong>
+
+                </div>
+
+                <div class="scan-row">
+
+                    <span>
+                        Número de cuenta
+                    </span>
+
+                    <strong id="accountNumber">
+                        ---
+                    </strong>
+
+                </div>
+
+                <div class="scan-row">
+
+                    <span>
+                        RUT / ID
+                    </span>
+
+                    <strong id="taxId">
+                        ---
+                    </strong>
+
+                </div>
+
+                <div class="scan-row">
+
+                    <span>
+                        Correo
+                    </span>
+
+                    <strong id="paymentEmail">
+                        ---
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Monto a transferir
+                </label>
+
+                <input
+                    type="text"
+                    id="amount"
+                    placeholder="$ 0"
+                >
+
+            </div>
+
+            <button
+                class="btn-primary scan-btn"
+                onclick="copyTransferData()"
+            >
+                Copiar Todo
+            </button>
+
+            <div
+                class="copy-success"
+                id="copySuccess"
+            >
+                Datos copiados correctamente.
+            </div>
+
+            <div class="scan-footer">
+
+                Escanea. Copia. Transfiere.
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="../js/api.js?v=20260614-db1"></script>
+    <script src="../js/escanear.js?v=20260614-db1"></script>
+
+</body>
+
+</html>

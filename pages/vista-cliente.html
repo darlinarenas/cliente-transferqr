@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Vista Cliente | TransferQR
+    </title>
+
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-logo">
+
+                <div class="logo">
+                    QR
+                </div>
+
+                <div>
+
+                    <h1>
+                        TransferQR
+                    </h1>
+
+                    <p>
+                        Panel del negocio
+                    </p>
+
+                </div>
+
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="dashboard.html">
+                    📊 Dashboard
+                </a>
+
+                <a href="negocio.html">
+                    🏪 Mi Negocio
+                </a>
+
+                <a href="qr.html">
+                    ▦ Mi QR
+                </a>
+
+                <a href="vista-cliente.html" class="active">
+                    📱 Vista Cliente
+                </a>
+
+                <a href="planes.html">
+                    ⭐ Planes
+                </a>
+
+                <button onclick="logout()">
+                    🚪 Salir
+                </button>
+
+            </nav>
+
+            <div class="sidebar-plan">
+
+                <strong>
+                    Plan Gratis
+                </strong>
+
+                <span>
+                    Vista móvil para probar cómo pagará el cliente.
+                </span>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- CONTENIDO PRINCIPAL -->
+
+        <main class="dashboard-main">
+
+            <header class="dashboard-header">
+
+                <div>
+
+                    <h2>
+                        Vista Cliente
+                    </h2>
+
+                    <p>
+                        Esta es la pantalla que verá el cliente al escanear el QR.
+                    </p>
+
+                </div>
+
+                <div class="user-box">
+
+                    <div class="user-avatar" id="userAvatar">
+                        T
+                    </div>
+
+                    <div>
+
+                        <strong id="businessNameHeader">
+                            Mi Negocio
+                        </strong>
+
+                        <span id="userEmailHeader">
+                            usuario@correo.com
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+
+            <section class="dashboard-grid">
+
+                <!-- TELÉFONO -->
+
+                <div class="dashboard-panel client-preview-panel">
+
+                    <div class="phone-frame">
+
+                        <div class="phone-screen">
+
+                            <div class="client-business-header">
+
+                                <div class="client-logo" id="clientLogo">
+                                    🏪
+                                </div>
+
+                                <h2 id="clientBusinessName">
+                                    Mi Negocio
+                                </h2>
+
+                                <p>
+                                    Datos para transferencia
+                                </p>
+
+                            </div>
+
+
+
+                            <div class="client-data">
+
+                                <div class="client-row">
+
+                                    <span>
+                                        Banco
+                                    </span>
+
+                                    <strong id="clientBank">
+                                        ---
+                                    </strong>
+
+                                </div>
+
+                                <div class="client-row">
+
+                                    <span>
+                                        Tipo de cuenta
+                                    </span>
+
+                                    <strong id="clientAccountType">
+                                        ---
+                                    </strong>
+
+                                </div>
+
+                                <div class="client-row">
+
+                                    <span>
+                                        N° de cuenta
+                                    </span>
+
+                                    <strong id="clientAccountNumber">
+                                        ---
+                                    </strong>
+
+                                </div>
+
+                                <div class="client-row">
+
+                                    <span>
+                                        RUT / ID
+                                    </span>
+
+                                    <strong id="clientTaxId">
+                                        ---
+                                    </strong>
+
+                                </div>
+
+                                <div class="client-row">
+
+                                    <span>
+                                        Correo
+                                    </span>
+
+                                    <strong id="clientPaymentEmail">
+                                        ---
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Monto a transferir
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="transferAmount"
+                                    placeholder="$ 0"
+                                >
+
+                            </div>
+
+
+
+                            <button class="btn-primary client-full-btn" onclick="copyTransferData()">
+                                Copiar Todo
+                            </button>
+
+                            <button class="btn-secondary client-full-btn" onclick="simulateClientScan()">
+                                Simular Escaneo
+                            </button>
+
+
+
+                            <div class="success-message" id="copyMessage">
+                                Datos copiados al portapapeles.
+                            </div>
+
+
+
+                            <div class="client-note">
+
+                                Este sistema no realiza la transferencia automática.
+                                Solo facilita copiar los datos correctos.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- INFORMACIÓN -->
+
+                <div class="dashboard-panel">
+
+                    <h3>
+                        ¿Qué prueba esta pantalla?
+                    </h3>
+
+                    <p>
+                        Aquí validamos el flujo principal del cliente.
+                    </p>
+
+                    <ul class="feature-list">
+
+                        <li>
+                            El cliente ve el logo del negocio
+                        </li>
+
+                        <li>
+                            El cliente ve los datos bancarios
+                        </li>
+
+                        <li>
+                            El cliente ingresa el monto manualmente
+                        </li>
+
+                        <li>
+                            El cliente copia todo con un botón
+                        </li>
+
+                        <li>
+                            Luego abre su banco y pega la información
+                        </li>
+
+                    </ul>
+
+                    <div class="upgrade-box">
+
+                        <strong>
+                            Luego en premium:
+                        </strong>
+
+                        <p>
+                            Podremos agregar comprobantes, historial de pagos,
+                            QR por sucursal y estadísticas por cada QR.
+                        </p>
+
+                    </div>
+
+                    <div class="dashboard-actions">
+
+                        <a href="negocio.html" class="btn-secondary">
+                            Editar Datos
+                        </a>
+
+                        <a href="qr.html" class="btn-primary">
+                            Volver al QR
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+    <script src="../js/api.js?v=20260614-db1"></script>
+    <script src="../js/vista-cliente.js?v=20260614-db1"></script>
+
+</body>
+
+</html>
+

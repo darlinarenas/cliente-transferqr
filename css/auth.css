@@ -1,0 +1,196 @@
+/* =========================================================
+   TransferQR - auth.css
+   Login y Registro
+========================================================= */
+
+.auth-container {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 500px;
+    background: #f5f6fb;
+}
+
+/* PANEL IZQUIERDO */
+
+.auth-info {
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.auth-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 40px;
+}
+
+.auth-logo h1 {
+    font-size: 28px;
+    margin-bottom: 4px;
+}
+
+.auth-logo p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.auth-info h2 {
+    font-size: 52px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    max-width: 600px;
+}
+
+.auth-description {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 600px;
+    margin-bottom: 40px;
+}
+
+.benefit-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.benefit-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    font-weight: 600;
+    box-shadow: var(--shadow);
+}
+
+/* PANEL DERECHO */
+
+.auth-card {
+    background: white;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 1px solid var(--border);
+}
+
+.auth-header {
+    margin-bottom: 30px;
+}
+
+.auth-header h2 {
+    font-size: 34px;
+    margin-bottom: 8px;
+}
+
+.auth-header p {
+    color: var(--muted);
+}
+
+/* FORMULARIO */
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: white;
+    font-size: 15px;
+    transition: 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.form-actions {
+    margin-top: 25px;
+}
+
+.form-actions .btn-primary {
+    width: 100%;
+    justify-content: center;
+}
+
+/* FOOTER */
+
+.auth-footer {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.auth-footer p {
+    color: var(--muted);
+}
+
+.auth-footer a {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 992px) {
+
+    .auth-container {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-info {
+        padding: 40px 24px;
+        text-align: center;
+    }
+
+    .auth-logo {
+        justify-content: center;
+    }
+
+    .auth-info h2 {
+        font-size: 40px;
+        max-width: 100%;
+    }
+
+    .auth-description {
+        max-width: 100%;
+    }
+
+    .auth-card {
+        border-left: none;
+        border-top: 1px solid var(--border);
+    }
+}
+
+@media (max-width: 576px) {
+
+    .auth-info {
+        padding: 30px 20px;
+    }
+
+    .auth-card {
+        padding: 30px 20px;
+    }
+
+    .auth-info h2 {
+        font-size: 32px;
+    }
+
+    .auth-header h2 {
+        font-size: 28px;
+    }
+}

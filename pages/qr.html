@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Mi QR | TransferQR
+    </title>
+
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-logo">
+
+                <div class="logo">
+                    QR
+                </div>
+
+                <div>
+
+                    <h1>
+                        TransferQR
+                    </h1>
+
+                    <p>
+                        Panel del negocio
+                    </p>
+
+                </div>
+
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="dashboard.html">
+                    📊 Dashboard
+                </a>
+
+                <a href="negocio.html">
+                    🏪 Mi Negocio
+                </a>
+
+                <a href="qr.html" class="active">
+                    ▦ Mi QR
+                </a>
+
+                <a href="vista-cliente.html">
+                    📱 Vista Cliente
+                </a>
+
+                <a href="planes.html">
+                    ⭐ Planes
+                </a>
+
+                <button onclick="logout()">
+                    🚪 Salir
+                </button>
+
+            </nav>
+
+            <div class="sidebar-plan">
+
+                <strong>
+                    Plan Gratis
+                </strong>
+
+                <span>
+                    1 QR básico con logo incluido.
+                </span>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- CONTENIDO PRINCIPAL -->
+
+        <main class="dashboard-main">
+
+            <header class="dashboard-header">
+
+                <div>
+
+                    <h2>
+                        Mi QR Gratis
+                    </h2>
+
+                    <p>
+                        Genera, descarga y comparte el primer QR de tu negocio.
+                    </p>
+
+                </div>
+
+                <div class="user-box">
+
+                    <div class="user-avatar" id="userAvatar">
+                        T
+                    </div>
+
+                    <div>
+
+                        <strong id="businessNameHeader">
+                            Mi Negocio
+                        </strong>
+
+                        <span id="userEmailHeader">
+                            usuario@correo.com
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+
+            <section class="dashboard-grid">
+
+                <!-- QR -->
+
+                <div class="dashboard-panel qr-panel">
+
+                    <span class="preview-plan">
+                        Plan Gratis: 1 QR disponible
+                    </span>
+
+                    <h3>
+                        QR principal del negocio
+                    </h3>
+
+                    <p>
+                        Este QR contiene la información necesaria para que el cliente
+                        pueda ver tus datos de transferencia.
+                    </p>
+
+                    <div class="qr-wrapper">
+
+                        <canvas
+                            id="qrCanvas"
+                            width="320"
+                            height="320"
+                        ></canvas>
+
+                    </div>
+
+                    <div class="qr-payload" id="qrPayload">
+                        Aún no has generado el QR.
+                    </div>
+
+                    <div class="dashboard-actions">
+
+                        <button class="btn-primary" onclick="generateQR(true)">
+                            Generar QR
+                        </button>
+
+                        <button class="btn-secondary" onclick="downloadQR()">
+                            Descargar PNG
+                        </button>
+
+                        <a href="vista-cliente.html" class="btn-secondary">
+                            Ver Vista Cliente
+                        </a>
+
+                    </div>
+
+                    <div class="success-message" id="successMessage">
+                        QR generado correctamente.
+                    </div>
+
+                </div>
+
+
+
+                <!-- INFORMACIÓN -->
+
+                <div class="dashboard-panel">
+
+                    <h3>
+                        Información incluida
+                    </h3>
+
+                    <p>
+                        En esta primera versión el QR gratis incluirá:
+                    </p>
+
+                    <ul class="feature-list">
+
+                        <li>
+                            Nombre del negocio
+                        </li>
+
+                        <li>
+                            Logo dentro del QR
+                        </li>
+
+                        <li>
+                            Banco
+                        </li>
+
+                        <li>
+                            Tipo de cuenta
+                        </li>
+
+                        <li>
+                            Número de cuenta
+                        </li>
+
+                        <li>
+                            RUT / Cédula / Identificación
+                        </li>
+
+                        <li>
+                            Correo para pagos
+                        </li>
+
+                    </ul>
+
+                    <div class="upgrade-box">
+
+                        <strong>
+                            Importante:
+                        </strong>
+
+                        <p>
+                            El QR se genera desde el backend y queda conectado a la base de datos.
+                        </p>
+
+                    </div>
+
+                    <div class="dashboard-actions">
+
+                        <a href="negocio.html" class="btn-secondary">
+                            Editar Datos
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+    <script src="../js/api.js?v=20260614-db1"></script>
+    <script src="../js/qr.js?v=20260614-db1"></script>
+
+</body>
+
+</html>
+

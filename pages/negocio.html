@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Mi Negocio | TransferQR
+    </title>
+
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-logo">
+
+                <div class="logo">
+                    QR
+                </div>
+
+                <div>
+
+                    <h1>
+                        TransferQR
+                    </h1>
+
+                    <p>
+                        Panel del negocio
+                    </p>
+
+                </div>
+
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="dashboard.html">
+                    📊 Dashboard
+                </a>
+
+                <a href="negocio.html" class="active">
+                    🏪 Mi Negocio
+                </a>
+
+                <a href="qr.html">
+                    ▦ Mi QR
+                </a>
+
+                <a href="vista-cliente.html">
+                    📱 Vista Cliente
+                </a>
+
+                <a href="planes.html">
+                    ⭐ Planes
+                </a>
+
+                <button onclick="logout()">
+                    🚪 Salir
+                </button>
+
+            </nav>
+
+            <div class="sidebar-plan">
+
+                <strong>
+                    Plan Gratis
+                </strong>
+
+                <span>
+                    1 QR básico con logo incluido.
+                </span>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- CONTENIDO PRINCIPAL -->
+
+        <main class="dashboard-main">
+
+            <header class="dashboard-header">
+
+                <div>
+
+                    <h2>
+                        Mi Negocio
+                    </h2>
+
+                    <p>
+                        Configura los datos que verá el cliente al escanear tu QR.
+                    </p>
+
+                </div>
+
+                <div class="user-box">
+
+                    <div class="user-avatar" id="userAvatar">
+                        T
+                    </div>
+
+                    <div>
+
+                        <strong id="businessNameHeader">
+                            Mi Negocio
+                        </strong>
+
+                        <span id="userEmailHeader">
+                            usuario@correo.com
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+
+            <section class="dashboard-grid">
+
+                <!-- FORMULARIO -->
+
+                <div class="dashboard-panel">
+
+                    <h3>
+                        Datos bancarios del negocio
+                    </h3>
+
+                    <p>
+                        Estos datos serán copiados por el cliente para realizar la transferencia.
+                    </p>
+
+                    <form id="businessForm">
+
+                        <div class="form-group">
+
+                            <label>
+                                Nombre comercial
+                            </label>
+
+                            <input
+                                type="text"
+                                id="businessName"
+                                placeholder="Nombre de tu negocio"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label>
+                                RUT / Cédula / Identificación fiscal
+                            </label>
+
+                            <input
+                                type="text"
+                                id="taxId"
+                                placeholder="RUT, cédula o identificación fiscal"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Correo para pagos
+                            </label>
+
+                            <input
+                                type="email"
+                                id="paymentEmail"
+                                placeholder="correo de pagos"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Banco
+                            </label>
+
+                            <input
+                                type="text"
+                                id="bank"
+                                placeholder="Nombre del banco"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Tipo de cuenta
+                            </label>
+
+                            <select id="accountType" required>
+
+                                <option value="">
+                                    Seleccione tipo de cuenta
+                                </option>
+
+                                <option>
+                                    Cuenta Vista
+                                </option>
+
+                                <option>
+                                    Cuenta Corriente
+                                </option>
+
+                                <option>
+                                    Cuenta RUT
+                                </option>
+
+                                <option>
+                                    Cuenta de Ahorro
+                                </option>
+
+                                <option>
+                                    Otro
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Número de cuenta
+                            </label>
+
+                            <input
+                                type="text"
+                                id="accountNumber"
+                                placeholder="Número de cuenta"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Logo del negocio
+                            </label>
+
+                            <input
+                                type="file"
+                                id="businessLogo"
+                                accept="image/*"
+                            >
+
+                            <small class="form-help">
+                                En esta primera versión el logo se guarda temporalmente en el navegador.
+                                Luego lo enviaremos al bucket.
+                            </small>
+
+                        </div>
+
+
+
+                        <div class="dashboard-actions">
+
+                            <button type="submit" class="btn-primary">
+                                Guardar Datos
+                            </button>
+
+                        </div>
+
+                        <div class="success-message" id="successMessage">
+                            Datos guardados correctamente.
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+
+                <!-- PREVIEW -->
+
+                <div class="dashboard-panel">
+
+                    <h3>
+                        Vista previa
+                    </h3>
+
+                    <p>
+                        Así se verá la información principal de tu negocio.
+                    </p>
+
+                    <div class="business-preview">
+
+                        <div class="preview-logo" id="previewLogo">
+                            🏪
+                        </div>
+
+                        <h2 id="previewBusinessName">
+                            Mi Negocio
+                        </h2>
+
+                        <span class="preview-plan">
+                            Plan Gratis
+                        </span>
+
+                        <div class="preview-data">
+
+                            <div>
+                                <span>Banco</span>
+                                <strong id="previewBank">---</strong>
+                            </div>
+
+                            <div>
+                                <span>Tipo de cuenta</span>
+                                <strong id="previewAccountType">---</strong>
+                            </div>
+
+                            <div>
+                                <span>N° cuenta</span>
+                                <strong id="previewAccountNumber">---</strong>
+                            </div>
+
+                            <div>
+                                <span>RUT / ID</span>
+                                <strong id="previewTaxId">---</strong>
+                            </div>
+
+                            <div>
+                                <span>Correo</span>
+                                <strong id="previewPaymentEmail">---</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="upgrade-box">
+
+                        <strong>
+                            Siguiente paso:
+                        </strong>
+
+                        <p>
+                            Después de guardar estos datos, podrás generar tu primer QR gratis.
+                        </p>
+
+                    </div>
+
+                    <div class="dashboard-actions">
+
+                        <a href="qr.html" class="btn-primary">
+                            Ir a Mi QR
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+    <script src="../js/api.js?v=20260614-db1"></script>
+    <script src="../js/negocio.js?v=20260614-db1"></script>
+
+</body>
+
+</html>
+
+
+

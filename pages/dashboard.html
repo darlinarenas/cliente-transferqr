@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Dashboard | TransferQR
+    </title>
+
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-logo">
+
+                <div class="logo">
+                    QR
+                </div>
+
+                <div>
+
+                    <h1>
+                        TransferQR
+                    </h1>
+
+                    <p>
+                        Panel del negocio
+                    </p>
+
+                </div>
+
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="dashboard.html" class="active">
+                    📊 Dashboard
+                </a>
+
+                <a href="negocio.html">
+                    🏪 Mi Negocio
+                </a>
+
+                <a href="qr.html">
+                    ▦ Mi QR
+                </a>
+
+                <a href="vista-cliente.html">
+                    📱 Vista Cliente
+                </a>
+
+                <a href="planes.html">
+                    ⭐ Planes
+                </a>
+
+                <button onclick="logout()">
+                    🚪 Salir
+                </button>
+
+            </nav>
+
+            <div class="sidebar-plan">
+
+                <strong>
+                    Plan Gratis
+                </strong>
+
+                <span>
+                    1 QR básico con logo incluido.
+                </span>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- CONTENIDO PRINCIPAL -->
+
+        <main class="dashboard-main">
+
+            <header class="dashboard-header">
+
+                <div>
+
+                    <h2 id="welcomeTitle">
+                        Bienvenido
+                    </h2>
+
+                    <p>
+                        Configura tu negocio y genera tu primer QR gratuito.
+                    </p>
+
+                </div>
+
+                <div class="user-box">
+
+                    <div class="user-avatar" id="userAvatar">
+                        T
+                    </div>
+
+                    <div>
+
+                        <strong id="businessNameHeader">
+                            Mi Negocio
+                        </strong>
+
+                        <span id="userEmailHeader">
+                            usuario@correo.com
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+
+            <!-- MÉTRICAS -->
+
+            <section class="dashboard-cards">
+
+                <div class="dashboard-card">
+
+                    <span>
+                        Plan actual
+                    </span>
+
+                    <h3>
+                        Gratis
+                    </h3>
+
+                    <p>
+                        Cuenta activa
+                    </p>
+
+                </div>
+
+                <div class="dashboard-card">
+
+                    <span>
+                        QR generados
+                    </span>
+
+                    <h3 id="qrCount">
+                        0 / 1
+                    </h3>
+
+                    <p>
+                        Disponible en plan gratis
+                    </p>
+
+                </div>
+
+                <div class="dashboard-card">
+
+                    <span>
+                        Escaneos
+                    </span>
+
+                    <h3 id="scanCount">
+                        0
+                    </h3>
+
+                    <p>
+                        Prueba local del MVP
+                    </p>
+
+                </div>
+
+                <div class="dashboard-card">
+
+                    <span>
+                        Estado
+                    </span>
+
+                    <h3>
+                        Activo
+                    </h3>
+
+                    <p>
+                        Listo para configurar
+                    </p>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- PRIMEROS PASOS -->
+
+            <section class="dashboard-grid">
+
+                <div class="dashboard-panel">
+
+                    <h3>
+                        Primeros pasos
+                    </h3>
+
+                    <p>
+                        Para tener tu primer QR funcionando, completa estos pasos:
+                    </p>
+
+                    <div class="step-list">
+
+                        <div class="step-item">
+                            <span>1</span>
+                            <div>
+                                <strong>Completa los datos del negocio</strong>
+                                <p>Banco, tipo de cuenta, número, RUT y correo.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <span>2</span>
+                            <div>
+                                <strong>Sube el logo del negocio</strong>
+                                <p>El plan gratis permitirá mostrar un logo dentro del QR.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <span>3</span>
+                            <div>
+                                <strong>Genera tu QR gratuito</strong>
+                                <p>El cliente escanea y copia los datos para transferir.</p>
+                            </div>
+                        </div>
+
+                        <div class="step-item">
+                            <span>4</span>
+                            <div>
+                                <strong>Descarga o imprime tu QR</strong>
+                                <p>Úsalo en caja, mesas, ferias o delivery.</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="dashboard-actions">
+
+                        <a href="negocio.html" class="btn-primary">
+                            Configurar Negocio
+                        </a>
+
+                        <a href="qr.html" class="btn-secondary">
+                            Ver Mi QR
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="dashboard-panel">
+
+                    <h3>
+                        Resumen del plan gratis
+                    </h3>
+
+                    <p>
+                        Esta primera versión está pensada para validar rápido el producto.
+                    </p>
+
+                    <ul class="feature-list">
+
+                        <li>
+                            1 QR gratuito
+                        </li>
+
+                        <li>
+                            Logo del negocio
+                        </li>
+
+                        <li>
+                            Datos bancarios copiables
+                        </li>
+
+                        <li>
+                            Vista cliente móvil
+                        </li>
+
+                        <li>
+                            Preparado para conectar backend
+                        </li>
+
+                    </ul>
+
+                    <div class="upgrade-box">
+
+                        <strong>
+                            Más adelante:
+                        </strong>
+
+                        <p>
+                            QRs ilimitados, colores personalizados, reportes,
+                            comprobantes y sucursales serán funciones premium.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+    <script src="../js/api.js?v=20260614-db1"></script>
+    <script src="../js/dashboard.js?v=20260614-db1"></script>
+
+</body>
+
+</html>
+

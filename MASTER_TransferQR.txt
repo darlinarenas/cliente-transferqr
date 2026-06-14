@@ -1,0 +1,13 @@
+MASTER TransferQR - Producción
+
+Arquitectura:
+- Frontend: Vercel
+- Backend: Render
+- Base de datos: Supabase PostgreSQL
+
+Reglas:
+- Usuarios en tabla users.
+- Datos bancarios/negocio en tabla businesses.
+- Escaneos en tabla qr_scans.
+- QR público apunta al dominio de Vercel.
+- El navegador no guarda datos del negocio; solo conserva token de sesión temporal.

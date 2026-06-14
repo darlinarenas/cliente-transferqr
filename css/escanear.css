@@ -1,0 +1,171 @@
+/* =========================================================
+   TransferQR - escanear.css
+========================================================= */
+
+body {
+    background: #f5f6fb;
+    min-height: 100vh;
+}
+
+/* CONTENEDOR */
+
+.scan-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* CARD */
+
+.scan-card {
+    width: 100%;
+    max-width: 480px;
+    background: white;
+    border-radius: 28px;
+    padding: 30px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+}
+
+/* LOGO */
+
+.scan-logo {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 18px;
+    border-radius: 24px;
+    background: var(--soft);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-size: 42px;
+}
+
+.scan-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* TITULO */
+
+.scan-card h1 {
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: 32px;
+}
+
+.scan-subtitle {
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 25px;
+}
+
+/* DATOS */
+
+.scan-data {
+    margin-bottom: 25px;
+}
+
+.scan-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 15px;
+}
+
+.scan-row span {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.scan-row strong {
+    text-align: right;
+    word-break: break-word;
+}
+
+/* INPUT */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    font-size: 16px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+/* BOTON */
+
+.scan-btn {
+    width: 100%;
+    justify-content: center;
+}
+
+/* MENSAJE */
+
+.copy-success {
+    display: none;
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #eaf8f0;
+    color: #157347;
+    text-align: center;
+    font-weight: 600;
+}
+
+.copy-success.show {
+    display: block;
+}
+
+/* FOOTER */
+
+.scan-footer {
+    text-align: center;
+    margin-top: 25px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 576px) {
+
+    .scan-card {
+        padding: 22px;
+    }
+
+    .scan-card h1 {
+        font-size: 26px;
+    }
+
+    .scan-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .scan-row strong {
+        text-align: left;
+    }
+
+}
