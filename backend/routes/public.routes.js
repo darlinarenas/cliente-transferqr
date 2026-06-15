@@ -1,6 +1,11 @@
 /* =========================================================
    TransferQR - Public routes
-   100% PostgreSQL/Supabase. 
+   100% PostgreSQL/Supabase.
+
+   IMPORTANTE:
+   La vista pública necesita devolver también el nombre real
+   del dueño/usuario para que el banco reciba primero:
+   Nombre, RUT, correo, banco, tipo de cuenta, número de cuenta.
 ========================================================= */
 
 const express = require('express');
@@ -23,13 +28,16 @@ router.get('/business/:publicId', async (req, res) => {
         await registerScan(req.params.publicId);
 
         const formatted = publicUser(user);
+        const business = formatted.business || {};
 
         res.json({
             ok: true,
             business: {
-                ...formatted.business,
+                ...business,
                 ownerName: formatted.fullName || '',
-                ownerEmail: formatted.email || ''
+                fullName: formatted.fullName || '',
+                ownerEmail: formatted.email || '',
+                email: business.paymentEmail || formatted.email || ''
             }
         });
     } catch (error) {

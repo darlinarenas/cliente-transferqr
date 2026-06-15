@@ -1,7 +1,18 @@
 /* =========================================================
    TransferQR - escanear.js
-   Página pública que verá el cliente, conectada al backend.
-   Orden de visualización y copiado optimizado para bancos.
+   Página pública del cliente.
+
+   Corrección importante:
+   El banco necesita recibir primero el NOMBRE.
+   Por eso el copiado ahora va SIN etiquetas y en este orden fijo:
+
+   1) Nombre y apellido
+   2) RUT / Cédula
+   3) Correo
+   4) Banco
+   5) Tipo de cuenta
+   6) Número de cuenta
+   7) Monto, si el cliente lo escribió
 ========================================================= */
 
 let publicBusiness = null;
@@ -24,29 +35,33 @@ async function loadBusinessData() {
         publicBusiness = normalizeBusiness(data.business || {});
         renderBusiness(publicBusiness);
     } catch (error) {
+        console.error('LOAD_PUBLIC_BUSINESS_ERROR', error);
         setText('businessName', 'Negocio no encontrado');
     }
 }
 
 function normalizeBusiness(business) {
     return {
-        ownerName: business.ownerName || business.fullName || business.name || '',
-        taxId: business.taxId || '',
-        paymentEmail: business.paymentEmail || business.ownerEmail || business.email || '',
-        bank: business.bank || '',
-        accountType: business.accountType || '',
-        accountNumber: business.accountNumber || '',
-        name: business.name || '',
+        ownerName: cleanValue(
+            business.ownerName ||
+            business.fullName ||
+            business.owner_full_name ||
+            business.userFullName ||
+            ''
+        ),
+        taxId: cleanValue(business.taxId || business.rut || business.documentId || ''),
+        paymentEmail: cleanValue(business.paymentEmail || business.ownerEmail || business.email || ''),
+        bank: cleanValue(business.bank || ''),
+        accountType: cleanValue(business.accountType || ''),
+        accountNumber: cleanValue(business.accountNumber || ''),
+        name: cleanValue(business.name || ''),
         logo: business.logo || ''
     };
 }
 
 function renderBusiness(business) {
-    setText('businessName', business.name || business.ownerName || 'TransferQR');
+    setText('businessName', business.name || 'TransferQR');
 
-    // Orden visible solicitado:
-    // 1) Nombre y apellido, 2) RUT/Cédula, 3) Email,
-    // 4) Banco, 5) Tipo de cuenta, 6) Número de cuenta.
     setText('ownerName', business.ownerName || '---');
     setText('taxId', business.taxId || '---');
     setText('paymentEmail', business.paymentEmail || '---');
@@ -70,11 +85,12 @@ function copyTransferData() {
     if (!publicBusiness) return;
 
     const amountInput = document.getElementById('amount');
-    const amount = amountInput ? amountInput.value.trim() : '';
+    const amount = amountInput ? cleanValue(amountInput.value) : '';
 
-    // Texto pensado para pegar en el banco o en una nota sin desorden.
-    // Va en el orden exacto pedido por el usuario.
-    // Dejamos valores limpios, uno por línea, sin textos extras al inicio.
+    // IMPORTANTE:
+    // No usamos etiquetas tipo "Banco:" porque algunos bancos pegan
+    // el portapapeles por posición. Si agregamos etiquetas, se corren
+    // los campos. Aquí el primer dato SIEMPRE es el nombre.
     const lines = [
         publicBusiness.ownerName,
         publicBusiness.taxId,
@@ -89,14 +105,38 @@ function copyTransferData() {
     }
 
     const transferData = lines
-        .map(value => String(value || '').trim())
-        .filter(Boolean)
-        .join('
-');
+        .map(cleanValue)
+        .join('\n');
 
     navigator.clipboard.writeText(transferData)
         .then(showCopyMessage)
-        .catch(() => alert('No fue posible copiar los datos.'));
+        .catch(() => fallbackCopy(transferData));
+}
+
+function fallbackCopy(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+        document.execCommand('copy');
+        showCopyMessage();
+    } catch (error) {
+        alert('No fue posible copiar los datos.');
+    }
+
+    document.body.removeChild(textarea);
+}
+
+function cleanValue(value) {
+    return String(value || '')
+        .replace(/\r?\n|\r/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
 }
 
 function showCopyMessage() {
