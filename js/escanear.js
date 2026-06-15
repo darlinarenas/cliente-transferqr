@@ -3,26 +3,25 @@
    Página pública del cliente.
 
    CORRECCIÓN FINAL:
-   El copiado para el banco debe iniciar SIEMPRE con el nombre.
-   Si el backend no trae ownerName/fullName, se usa el nombre del negocio.
-   Nunca se usa accountType como nombre.
+   - La vista cliente ahora muestra el NOMBRE / TITULAR.
+   - El botón Copiar Todo copia primero el nombre.
+   - Si el backend no trae ownerName/fullName, usa el nombre visible del negocio
+     para evitar que el banco pegue "Tipo de cuenta" en el campo Nombre.
+
+   Orden de copiado para banco:
+   1) Nombre / Titular
+   2) RUT / Cédula
+   3) Correo
+   4) Banco
+   5) Tipo de cuenta
+   6) Número de cuenta
+   7) Monto, si el cliente lo escribió
 ========================================================= */
 
 let publicBusiness = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     loadBusinessData();
-
-    const copyButton = document.getElementById('copyTransferData');
-    if (copyButton) {
-        copyButton.addEventListener('click', copyTransferData);
-    }
-
-    const legacyCopyButton = document.querySelector('[onclick="copyTransferData()"]');
-    if (legacyCopyButton) {
-        legacyCopyButton.removeAttribute('onclick');
-        legacyCopyButton.addEventListener('click', copyTransferData);
-    }
 });
 
 async function loadBusinessData() {
@@ -59,45 +58,20 @@ function normalizeBusiness(business) {
         business.owner_full_name ||
         business.userFullName ||
         business.user_full_name ||
-        business.owner ||
+        business.titular ||
+        business.holderName ||
+        business.holder_name ||
         businessName ||
         ''
     );
 
     return {
         ownerName,
-        taxId: cleanValue(
-            business.taxId ||
-            business.tax_id ||
-            business.rut ||
-            business.documentId ||
-            business.document_id ||
-            business.document ||
-            ''
-        ),
-        paymentEmail: cleanValue(
-            business.paymentEmail ||
-            business.payment_email ||
-            business.ownerEmail ||
-            business.owner_email ||
-            business.email ||
-            ''
-        ),
-        bank: cleanValue(business.bank || business.bankName || business.bank_name || ''),
-        accountType: cleanValue(
-            business.accountType ||
-            business.account_type ||
-            business.typeAccount ||
-            business.type_account ||
-            ''
-        ),
-        accountNumber: cleanValue(
-            business.accountNumber ||
-            business.account_number ||
-            business.numberAccount ||
-            business.number_account ||
-            ''
-        ),
+        taxId: cleanValue(business.taxId || business.tax_id || business.rut || business.documentId || business.document_id || ''),
+        paymentEmail: cleanValue(business.paymentEmail || business.payment_email || business.ownerEmail || business.owner_email || business.email || ''),
+        bank: cleanValue(business.bank || ''),
+        accountType: cleanValue(business.accountType || business.account_type || ''),
+        accountNumber: cleanValue(business.accountNumber || business.account_number || ''),
         name: businessName,
         logo: business.logo || ''
     };
@@ -106,14 +80,47 @@ function normalizeBusiness(business) {
 function renderBusiness(business) {
     setText('businessName', business.name || 'TransferQR');
 
-    setText('ownerName', business.ownerName || '---');
+    // Esta línea llena el dato si ya existe en el HTML.
+    setText('ownerName', business.ownerName || business.name || '---');
+
     setText('taxId', business.taxId || '---');
     setText('paymentEmail', business.paymentEmail || '---');
     setText('bank', business.bank || '---');
     setText('accountType', business.accountType || '---');
     setText('accountNumber', business.accountNumber || '---');
 
+    // Esta función crea visualmente la fila NOMBRE si el HTML viejo no la tiene.
+    ensureOwnerNameRow(business.ownerName || business.name || '---');
+
     loadLogo(business);
+}
+
+function ensureOwnerNameRow(ownerName) {
+    // Si ya existe el elemento ownerName en el HTML, no duplicamos.
+    if (document.getElementById('ownerName')) return;
+
+    const bankElement = document.getElementById('bank');
+    if (!bankElement) return;
+
+    const bankRow = bankElement.closest('.data-row, .info-row, .detail-row, .transfer-row, li, div');
+    if (!bankRow || !bankRow.parentNode) return;
+
+    const ownerRow = bankRow.cloneNode(true);
+
+    const label = ownerRow.querySelector('span, label, p, div');
+    if (label) label.textContent = 'Nombre';
+
+    const valueCandidates = ownerRow.querySelectorAll('strong, b, span, p, div');
+    const value = valueCandidates[valueCandidates.length - 1];
+
+    if (value) {
+        value.id = 'ownerName';
+        value.textContent = ownerName || '---';
+    } else {
+        ownerRow.innerHTML = `<span>Nombre</span><strong id="ownerName">${escapeHtml(ownerName || '---')}</strong>`;
+    }
+
+    bankRow.parentNode.insertBefore(ownerRow, bankRow);
 }
 
 function loadLogo(business) {
@@ -126,52 +133,27 @@ function loadLogo(business) {
 }
 
 function copyTransferData() {
-    if (!publicBusiness) {
-        alert('Los datos todavía no están cargados.');
-        return;
-    }
+    if (!publicBusiness) return;
 
     const amountInput = document.getElementById('amount');
     const amount = amountInput ? cleanValue(amountInput.value) : '';
 
-    const nameForBank = cleanValue(publicBusiness.ownerName || publicBusiness.name || '');
+    const ownerName = cleanValue(publicBusiness.ownerName || publicBusiness.name || '');
 
-    if (!nameForBank) {
-        alert('Falta el nombre del titular. Guarda nuevamente los datos del negocio.');
-        return;
-    }
-
-    /*
-      ORDEN EXACTO PARA PEGAR EN EL BANCO:
-
-      1) Nombre y apellido
-      2) RUT / Cédula
-      3) Correo
-      4) Banco
-      5) Tipo de cuenta
-      6) Número de cuenta
-      7) Monto, si existe
-
-      IMPORTANTE:
-      Van sin etiquetas, uno debajo del otro.
-    */
     const lines = [
-        nameForBank,
+        ownerName,
         publicBusiness.taxId,
         publicBusiness.paymentEmail,
         publicBusiness.bank,
         publicBusiness.accountType,
         publicBusiness.accountNumber
-    ];
+    ].map(cleanValue).filter(Boolean);
 
     if (amount) {
         lines.push(amount);
     }
 
-    const transferData = lines
-        .map(cleanValue)
-        .filter(value => value !== '')
-        .join('\n');
+    const transferData = lines.join('\n');
 
     navigator.clipboard.writeText(transferData)
         .then(showCopyMessage)
@@ -184,9 +166,7 @@ function fallbackCopy(text) {
     textarea.setAttribute('readonly', '');
     textarea.style.position = 'fixed';
     textarea.style.left = '-9999px';
-    textarea.style.top = '0';
     document.body.appendChild(textarea);
-    textarea.focus();
     textarea.select();
 
     try {
@@ -206,13 +186,18 @@ function cleanValue(value) {
         .trim();
 }
 
+function escapeHtml(value) {
+    return cleanValue(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 function showCopyMessage() {
     const message = document.getElementById('copySuccess');
-    if (!message) {
-        alert('Datos copiados correctamente.');
-        return;
-    }
-
+    if (!message) return;
     message.classList.add('show');
     setTimeout(() => message.classList.remove('show'), 2500);
 }
