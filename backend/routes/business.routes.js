@@ -28,6 +28,7 @@ function businessIsReady(business) {
     return Boolean(
         business &&
         business.name &&
+        business.ownerName &&
         business.taxId &&
         business.paymentEmail &&
         business.bank &&
@@ -63,6 +64,7 @@ router.put('/me', authRequired, async (req, res) => {
 
         const updatedBusiness = {
             name: String(incoming.name || '').trim(),
+            ownerName: String(incoming.ownerName || incoming.owner_name || current.owner_name || current.full_name || '').trim(),
             taxId: String(incoming.taxId || '').trim(),
             paymentEmail: String(incoming.paymentEmail || '').trim().toLowerCase(),
             bank: String(incoming.bank || '').trim(),

@@ -140,14 +140,17 @@ function copyTransferData() {
 
     const ownerName = cleanValue(publicBusiness.ownerName || publicBusiness.name || '');
 
+    // Orden real para pegar en el banco:
+    // Nombre, RUT, Tipo de cuenta, N° cuenta, Banco, Email, Monto.
+    // No eliminamos campos vacíos para no correr las posiciones.
     const lines = [
         ownerName,
         publicBusiness.taxId,
-        publicBusiness.paymentEmail,
-        publicBusiness.bank,
         publicBusiness.accountType,
-        publicBusiness.accountNumber
-    ].map(cleanValue).filter(Boolean);
+        publicBusiness.accountNumber,
+        publicBusiness.bank,
+        publicBusiness.paymentEmail
+    ].map(cleanValue);
 
     if (amount) {
         lines.push(amount);

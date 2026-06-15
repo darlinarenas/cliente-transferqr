@@ -34,8 +34,8 @@ router.get('/business/:publicId', async (req, res) => {
             ok: true,
             business: {
                 ...business,
-                ownerName: formatted.fullName || '',
-                fullName: formatted.fullName || '',
+                ownerName: business.ownerName || formatted.fullName || business.name || '',
+                fullName: business.ownerName || formatted.fullName || business.name || '',
                 ownerEmail: formatted.email || '',
                 email: business.paymentEmail || formatted.email || ''
             }

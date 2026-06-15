@@ -31,6 +31,7 @@ function loadUserHeader(user) {
 function loadBusinessForm(user) {
     const business = user.business || {};
     setValue('businessName', business.name || '');
+    setValue('ownerName', business.ownerName || user.fullName || '');
     setValue('taxId', business.taxId || '');
     setValue('paymentEmail', business.paymentEmail || user.email || '');
     setValue('bank', business.bank || '');
@@ -58,6 +59,7 @@ if (businessForm) {
 
         const updatedBusiness = {
             name: getValue('businessName'),
+            ownerName: getValue('ownerName'),
             taxId: getValue('taxId'),
             paymentEmail: getValue('paymentEmail'),
             bank: getValue('bank'),
@@ -89,6 +91,7 @@ if (businessLogo) {
         reader.onload = async function (readerEvent) {
             const business = {
                 name: getValue('businessName'),
+                ownerName: getValue('ownerName'),
                 taxId: getValue('taxId'),
                 paymentEmail: getValue('paymentEmail'),
                 bank: getValue('bank'),
@@ -120,6 +123,7 @@ function updatePreview(user) {
     }
 
     setText('previewBusinessName', business.name || 'Mi Negocio');
+    setText('previewOwnerName', business.ownerName || user.fullName || '---');
     setText('previewBank', business.bank || '---');
     setText('previewAccountType', business.accountType || '---');
     setText('previewAccountNumber', business.accountNumber || '---');

@@ -44,6 +44,7 @@ function loadClientView(user) {
     const business = user.business || {};
 
     document.getElementById('clientBusinessName').textContent = business.name || 'Mi Negocio';
+    document.getElementById('clientOwnerName').textContent = business.ownerName || user.fullName || business.name || '---';
     document.getElementById('clientBank').textContent = business.bank || '---';
     document.getElementById('clientAccountType').textContent = business.accountType || '---';
     document.getElementById('clientAccountNumber').textContent = business.accountNumber || '---';
@@ -67,14 +68,19 @@ function copyTransferData() {
     const business = currentUser.business || {};
     const amount = document.getElementById('transferAmount').value || '0';
 
-    const text = `Banco: ${business.bank || ''}
-Tipo de cuenta: ${business.accountType || ''}
-Número de cuenta: ${business.accountNumber || ''}
-RUT / ID: ${business.taxId || ''}
-Correo: ${business.paymentEmail || ''}
-Monto: ${amount}`;
+    // Orden real para pegar en el banco:
+    // Nombre, RUT, Tipo de cuenta, N° cuenta, Banco, Email, Monto.
+    const lines = [
+        business.ownerName || currentUser.fullName || business.name || '',
+        business.taxId || '',
+        business.accountType || '',
+        business.accountNumber || '',
+        business.bank || '',
+        business.paymentEmail || '',
+        amount
+    ];
 
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(lines.join('\n'));
 
     const message = document.getElementById('copyMessage');
 

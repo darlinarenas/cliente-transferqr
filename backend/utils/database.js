@@ -21,6 +21,7 @@ function businessFromRow(row) {
 
     return {
         name: row.business_name_value || '',
+        ownerName: row.owner_name || row.full_name || '',
         logo: row.logo || '',
         bank: row.bank || '',
         accountType: row.account_type || '',
@@ -59,6 +60,7 @@ async function findUserByEmail(email) {
         SELECT
             u.*,
             b.name AS business_name_value,
+            b.owner_name,
             b.logo,
             b.bank,
             b.account_type,
@@ -82,6 +84,7 @@ async function findUserById(id) {
         SELECT
             u.*,
             b.name AS business_name_value,
+            b.owner_name,
             b.logo,
             b.bank,
             b.account_type,
@@ -105,6 +108,7 @@ async function findUserByPublicId(publicId) {
         SELECT
             u.*,
             b.name AS business_name_value,
+            b.owner_name,
             b.logo,
             b.bank,
             b.account_type,
@@ -153,6 +157,7 @@ async function createUserWithBusiness({ publicId, fullName, email, businessName,
             INSERT INTO businesses (
                 user_id,
                 name,
+                owner_name,
                 logo,
                 bank,
                 account_type,
@@ -160,9 +165,9 @@ async function createUserWithBusiness({ publicId, fullName, email, businessName,
                 tax_id,
                 payment_email
             )
-            VALUES ($1, $2, '', '', '', '', '', $3)
+            VALUES ($1, $2, $3, '', '', '', '', '', $4)
             `,
-            [user.id, businessName, email]
+            [user.id, businessName, fullName, email]
         );
 
         await client.query('COMMIT');
@@ -182,12 +187,13 @@ async function updateBusiness(userId, business) {
         UPDATE businesses
         SET
             name = $2,
-            tax_id = $3,
-            payment_email = $4,
-            bank = $5,
-            account_type = $6,
-            account_number = $7,
-            logo = $8,
+            owner_name = $3,
+            tax_id = $4,
+            payment_email = $5,
+            bank = $6,
+            account_type = $7,
+            account_number = $8,
+            logo = $9,
             updated_at = NOW()
         WHERE user_id = $1
         RETURNING *
@@ -195,6 +201,7 @@ async function updateBusiness(userId, business) {
         [
             userId,
             business.name,
+            business.ownerName,
             business.taxId,
             business.paymentEmail,
             business.bank,
@@ -210,6 +217,7 @@ async function updateBusiness(userId, business) {
             INSERT INTO businesses (
                 user_id,
                 name,
+                owner_name,
                 tax_id,
                 payment_email,
                 bank,
@@ -217,11 +225,12 @@ async function updateBusiness(userId, business) {
                 account_number,
                 logo
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
             `,
             [
                 userId,
                 business.name,
+                business.ownerName,
                 business.taxId,
                 business.paymentEmail,
                 business.bank,
