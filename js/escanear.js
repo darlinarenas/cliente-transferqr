@@ -2,23 +2,27 @@
    TransferQR - escanear.js
    Página pública del cliente.
 
-   Corrección importante:
-   El banco necesita recibir primero el NOMBRE.
-   Por eso el copiado ahora va SIN etiquetas y en este orden fijo:
-
-   1) Nombre y apellido
-   2) RUT / Cédula
-   3) Correo
-   4) Banco
-   5) Tipo de cuenta
-   6) Número de cuenta
-   7) Monto, si el cliente lo escribió
+   CORRECCIÓN FINAL:
+   El copiado para el banco debe iniciar SIEMPRE con el nombre.
+   Si el backend no trae ownerName/fullName, se usa el nombre del negocio.
+   Nunca se usa accountType como nombre.
 ========================================================= */
 
 let publicBusiness = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     loadBusinessData();
+
+    const copyButton = document.getElementById('copyTransferData');
+    if (copyButton) {
+        copyButton.addEventListener('click', copyTransferData);
+    }
+
+    const legacyCopyButton = document.querySelector('[onclick="copyTransferData()"]');
+    if (legacyCopyButton) {
+        legacyCopyButton.removeAttribute('onclick');
+        legacyCopyButton.addEventListener('click', copyTransferData);
+    }
 });
 
 async function loadBusinessData() {
@@ -41,20 +45,60 @@ async function loadBusinessData() {
 }
 
 function normalizeBusiness(business) {
+    const businessName = cleanValue(
+        business.name ||
+        business.businessName ||
+        business.business_name ||
+        ''
+    );
+
+    const ownerName = cleanValue(
+        business.ownerName ||
+        business.fullName ||
+        business.full_name ||
+        business.owner_full_name ||
+        business.userFullName ||
+        business.user_full_name ||
+        business.owner ||
+        businessName ||
+        ''
+    );
+
     return {
-        ownerName: cleanValue(
-            business.ownerName ||
-            business.fullName ||
-            business.owner_full_name ||
-            business.userFullName ||
+        ownerName,
+        taxId: cleanValue(
+            business.taxId ||
+            business.tax_id ||
+            business.rut ||
+            business.documentId ||
+            business.document_id ||
+            business.document ||
             ''
         ),
-        taxId: cleanValue(business.taxId || business.rut || business.documentId || ''),
-        paymentEmail: cleanValue(business.paymentEmail || business.ownerEmail || business.email || ''),
-        bank: cleanValue(business.bank || ''),
-        accountType: cleanValue(business.accountType || ''),
-        accountNumber: cleanValue(business.accountNumber || ''),
-        name: cleanValue(business.name || ''),
+        paymentEmail: cleanValue(
+            business.paymentEmail ||
+            business.payment_email ||
+            business.ownerEmail ||
+            business.owner_email ||
+            business.email ||
+            ''
+        ),
+        bank: cleanValue(business.bank || business.bankName || business.bank_name || ''),
+        accountType: cleanValue(
+            business.accountType ||
+            business.account_type ||
+            business.typeAccount ||
+            business.type_account ||
+            ''
+        ),
+        accountNumber: cleanValue(
+            business.accountNumber ||
+            business.account_number ||
+            business.numberAccount ||
+            business.number_account ||
+            ''
+        ),
+        name: businessName,
         logo: business.logo || ''
     };
 }
@@ -82,17 +126,37 @@ function loadLogo(business) {
 }
 
 function copyTransferData() {
-    if (!publicBusiness) return;
+    if (!publicBusiness) {
+        alert('Los datos todavía no están cargados.');
+        return;
+    }
 
     const amountInput = document.getElementById('amount');
     const amount = amountInput ? cleanValue(amountInput.value) : '';
 
-    // IMPORTANTE:
-    // No usamos etiquetas tipo "Banco:" porque algunos bancos pegan
-    // el portapapeles por posición. Si agregamos etiquetas, se corren
-    // los campos. Aquí el primer dato SIEMPRE es el nombre.
+    const nameForBank = cleanValue(publicBusiness.ownerName || publicBusiness.name || '');
+
+    if (!nameForBank) {
+        alert('Falta el nombre del titular. Guarda nuevamente los datos del negocio.');
+        return;
+    }
+
+    /*
+      ORDEN EXACTO PARA PEGAR EN EL BANCO:
+
+      1) Nombre y apellido
+      2) RUT / Cédula
+      3) Correo
+      4) Banco
+      5) Tipo de cuenta
+      6) Número de cuenta
+      7) Monto, si existe
+
+      IMPORTANTE:
+      Van sin etiquetas, uno debajo del otro.
+    */
     const lines = [
-        publicBusiness.ownerName,
+        nameForBank,
         publicBusiness.taxId,
         publicBusiness.paymentEmail,
         publicBusiness.bank,
@@ -106,6 +170,7 @@ function copyTransferData() {
 
     const transferData = lines
         .map(cleanValue)
+        .filter(value => value !== '')
         .join('\n');
 
     navigator.clipboard.writeText(transferData)
@@ -119,7 +184,9 @@ function fallbackCopy(text) {
     textarea.setAttribute('readonly', '');
     textarea.style.position = 'fixed';
     textarea.style.left = '-9999px';
+    textarea.style.top = '0';
     document.body.appendChild(textarea);
+    textarea.focus();
     textarea.select();
 
     try {
@@ -141,7 +208,11 @@ function cleanValue(value) {
 
 function showCopyMessage() {
     const message = document.getElementById('copySuccess');
-    if (!message) return;
+    if (!message) {
+        alert('Datos copiados correctamente.');
+        return;
+    }
+
     message.classList.add('show');
     setTimeout(() => message.classList.remove('show'), 2500);
 }
