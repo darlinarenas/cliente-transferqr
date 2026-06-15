@@ -1,6 +1,7 @@
 /* =========================================================
    TransferQR - escanear.js
-   Página pública que verá el cliente, conectada al backend
+   Página pública que verá el cliente, conectada al backend.
+   Orden de visualización y copiado optimizado para bancos.
 ========================================================= */
 
 let publicBusiness = null;
@@ -20,20 +21,39 @@ async function loadBusinessData() {
 
     try {
         const data = await apiGetPublicBusiness(publicId);
-        publicBusiness = data.business || {};
+        publicBusiness = normalizeBusiness(data.business || {});
         renderBusiness(publicBusiness);
     } catch (error) {
         setText('businessName', 'Negocio no encontrado');
     }
 }
 
+function normalizeBusiness(business) {
+    return {
+        ownerName: business.ownerName || business.fullName || business.name || '',
+        taxId: business.taxId || '',
+        paymentEmail: business.paymentEmail || business.ownerEmail || business.email || '',
+        bank: business.bank || '',
+        accountType: business.accountType || '',
+        accountNumber: business.accountNumber || '',
+        name: business.name || '',
+        logo: business.logo || ''
+    };
+}
+
 function renderBusiness(business) {
-    setText('businessName', business.name || 'Mi Negocio');
+    setText('businessName', business.name || business.ownerName || 'TransferQR');
+
+    // Orden visible solicitado:
+    // 1) Nombre y apellido, 2) RUT/Cédula, 3) Email,
+    // 4) Banco, 5) Tipo de cuenta, 6) Número de cuenta.
+    setText('ownerName', business.ownerName || '---');
+    setText('taxId', business.taxId || '---');
+    setText('paymentEmail', business.paymentEmail || '---');
     setText('bank', business.bank || '---');
     setText('accountType', business.accountType || '---');
     setText('accountNumber', business.accountNumber || '---');
-    setText('taxId', business.taxId || '---');
-    setText('paymentEmail', business.paymentEmail || '---');
+
     loadLogo(business);
 }
 
@@ -49,16 +69,30 @@ function loadLogo(business) {
 function copyTransferData() {
     if (!publicBusiness) return;
 
-    const amount = document.getElementById('amount').value || '0';
+    const amountInput = document.getElementById('amount');
+    const amount = amountInput ? amountInput.value.trim() : '';
 
-    const transferData = `Monto: ${amount}
+    // Texto pensado para pegar en el banco o en una nota sin desorden.
+    // Va en el orden exacto pedido por el usuario.
+    // Dejamos valores limpios, uno por línea, sin textos extras al inicio.
+    const lines = [
+        publicBusiness.ownerName,
+        publicBusiness.taxId,
+        publicBusiness.paymentEmail,
+        publicBusiness.bank,
+        publicBusiness.accountType,
+        publicBusiness.accountNumber
+    ];
 
-Banco: ${publicBusiness.bank || ''}
-Tipo de cuenta: ${publicBusiness.accountType || ''}
-Número de cuenta: ${publicBusiness.accountNumber || ''}
-RUT / ID: ${publicBusiness.taxId || ''}
-Correo: ${publicBusiness.paymentEmail || ''}
-Negocio: ${publicBusiness.name || ''}`;
+    if (amount) {
+        lines.push(amount);
+    }
+
+    const transferData = lines
+        .map(value => String(value || '').trim())
+        .filter(Boolean)
+        .join('
+');
 
     navigator.clipboard.writeText(transferData)
         .then(showCopyMessage)

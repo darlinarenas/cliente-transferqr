@@ -26,7 +26,11 @@ router.get('/business/:publicId', async (req, res) => {
 
         res.json({
             ok: true,
-            business: formatted.business
+            business: {
+                ...formatted.business,
+                ownerName: formatted.fullName || '',
+                ownerEmail: formatted.email || ''
+            }
         });
     } catch (error) {
         console.error('PUBLIC_BUSINESS_ERROR', error);
